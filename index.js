@@ -7,8 +7,6 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-const items = [];
-
 const Product = db.product;
 
 // Create an item
@@ -22,13 +20,28 @@ app.post("/api/items", async (req, res) => {
       data: productCreate,
     });
   } catch (error) {
-    res.status(500).json(newItem);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error!"
+    });
   }
 });
 
 // Get all items
-app.get("/api/items", (req, res) => {
-  res.json(items);
+app.get("/api/items", async (req, res) => {
+  try {
+    const products = await Product.findAll();
+    res.status(200).json({
+      success: true,
+      message: "This is you data!",
+      data: products,
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error!"
+    });
+  }
 });
 
 async function setDB() {
