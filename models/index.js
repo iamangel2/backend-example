@@ -1,18 +1,23 @@
 const Sequelize = require("sequelize");
 const productModel = require("./product.model");
+const dbConfig = require("../config/db.config");
 
-const sequelize = new Sequelize("sayur_sircle", "root", '', {
-  host: "db",
-  dialect: "mysql",
-  port: "3306",
+require("dotenv").config();
+
+
+const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+  host: dbConfig.HOST,
+  dialect: dbConfig.dialect,
+  port: dbConfig.port,
 
   pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 0,
+    max: dbConfig.pool.max,
+    min: dbConfig.pool.min,
+    acquire: dbConfig.pool.acquire,
+    idle: dbConfig.pool.idle,
   },
 });
+
 
 const db = {};
 
