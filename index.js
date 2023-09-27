@@ -46,10 +46,9 @@ app.get("/api/items", async (req, res) => {
 
 async function setDB() {
   try {
-    const client = await db.sequelize.sync();
+    await db.sequelize.sync();
     console.info("Connection has been established successfully");
     app.listen(port, () => console.log(`listening on port ${port}`));
-    return client;
   } catch (e) {
     console.info(
       "ECONNREFUSED connecting to Mysql, " +
