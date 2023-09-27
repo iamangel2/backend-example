@@ -21,12 +21,13 @@ app.get('/items', (req, res) => {
   res.json(items);
 });
 
+app.listen(port, () => console.log(`listening on port ${port}`));
+
 
 async function setDB() {
   try {
     const client = await db.sequelize.sync();
     console.info("Connection has been established successfully");
-    app.listen(port, () => console.log(`listening on port ${port}`));
     console.log(client, "client")
     return client;
   } catch (e) {
@@ -37,4 +38,4 @@ async function setDB() {
   }
 }
 
-setDB();
+// setDB();
