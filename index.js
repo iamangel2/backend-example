@@ -1,5 +1,5 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 const db = require("./models");
 
@@ -9,19 +9,27 @@ app.use(bodyParser.json());
 
 const items = [];
 
+const Product = db.product;
+
 // Create an item
-app.post('/items', (req, res) => {
+app.post("/api/items", async (req, res) => {
   const newItem = req.body;
-  items.push(newItem);
-  res.status(201).json(newItem);
+  try {
+    const productCreate = await Product.create(newItem);
+    res.status(201).json({
+      success: true,
+      message: "Data recorded!",
+      data: productCreate,
+    });
+  } catch (error) {
+    res.status(500).json(newItem);
+  }
 });
 
 // Get all items
-app.get('/items', (req, res) => {
+app.get("/api/items", (req, res) => {
   res.json(items);
 });
-
-
 
 async function setDB() {
   try {
