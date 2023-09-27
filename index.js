@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const db = require("./models");
+const db = require("./db");
 
 const port = process.env.PORT || 3000;
 
@@ -12,6 +12,23 @@ const Product = db.product;
 // Create an item
 app.post("/api/items", async (req, res) => {
   const newItem = req.body;
+
+  const attributes = ["price", "name", "stock"];
+
+  let missingAttr = [];
+  for (const attr of attributes) {
+    if (!(attr in newItem)) {
+      missingAttr.push(attr);
+    }
+  }
+
+  if (missingAttr.length > 0) {
+    return res.status(400).json({
+      success: false,
+      message: `${missingAttr.join(" ")} missing!`,
+    });
+  }
+
   try {
     const productCreate = await Product.create(newItem);
     res.status(201).json({
@@ -22,7 +39,7 @@ app.post("/api/items", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Internal server error!"
+      message: "Internal server error!",
     });
   }
 });
@@ -35,11 +52,11 @@ app.get("/api/items", async (req, res) => {
       success: true,
       message: "This is you data!",
       data: products,
-    })
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Internal server error!"
+      message: "Internal server error!",
     });
   }
 });

@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const productModel = require("./product.model");
+const productModel = require("../models/product.model");
 
 require("dotenv").config();
 
