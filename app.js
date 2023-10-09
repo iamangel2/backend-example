@@ -12,6 +12,12 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5502'); // Izinkan akses dari origin tertentu
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE'); // Izinkan metode HTTP tertentu
+    res.header('Access-Control-Allow-Headers', 'Content-Type'); // Izinkan header tertentu
+    next();
+});
 
 // // Middleware for contact form input validation
 // function validateFeedback(req, res, next) {
@@ -77,21 +83,15 @@ app.post('/api/catalog', async(req, res) => {
 })
 
 
-app.get('/api/catalog', async(req, res) => {
-  try {
-    const catalog = await Catalog.findAll()
-    res.status(201).json({
-      success:true,
-      message:"Successful",
-      data:catalog
-    })
-  } catch (error) {
-    res.status(500).json({
-      success:false,
-      message:"Usuccessful"
-    })
-  }
-})
+app.get('/api/catalog', async (req, res) => {
+    try {
+        const response = await fetch('https://motionless-hen-tie.cyclic.app/api/catalog');
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 // Database Synchronization
 async function startdb(){
