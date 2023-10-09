@@ -79,11 +79,11 @@ app.post('/api/catalog', async(req, res) => {
 
 app.get('/api/catalog', async(req, res) => {
   try {
-    const catalogs = await Catalog.findAll()
+    const catalog = await Catalog.findAll()
     res.status(201).json({
       success:true,
       message:"Successful",
-      data:catalogs
+      data:catalog
     })
   } catch (error) {
     res.status(500).json({
